@@ -229,9 +229,9 @@ public class Stampede {
      */
     public void drive(double strafeRight, double forward, double turnCW, Telemetry telemetry) {
 
-        double speedfr = forward - strafeRight - turnCW;
+        double speedfr = forward - strafeRight + turnCW;
         double speedfl = forward + strafeRight + turnCW;
-        double speedrl = forward - strafeRight + turnCW;
+        double speedrl = forward - strafeRight - turnCW;
         double speedrr = forward + strafeRight - turnCW;
 
         double max = Math.max(Math.max(Math.abs(speedfl), Math.abs(speedfr)), Math.max(Math.abs(speedrl), Math.abs(speedrr)));

@@ -43,8 +43,6 @@ public class Tele_Op extends OpMode {
     Stampede stampede;
     double x1, y1, x2;
     double outSpeed, inSpeed;
-    double driveAngle = 0;
-    double driveAngleCheckTime = 0;
     ElapsedTime holdTimer = new ElapsedTime();
 
     public void initRobot() {
