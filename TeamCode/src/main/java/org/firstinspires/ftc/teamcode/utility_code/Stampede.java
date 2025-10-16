@@ -33,6 +33,8 @@ public class Stampede {
     public DcMotorEx intake;
     public DcMotorEx outtakeTop;
     public DcMotorEx outtakeBottom;
+    public Servo pushert = null;
+    public Servo pusherb = null;
     public Servo gate = null;
     public DcMotorEx odopodLeft = null;
     public DcMotorEx odopodRight = null;
@@ -175,7 +177,9 @@ public class Stampede {
         intake = setUpEncoderMotor("in", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         outtakeBottom = setUpEncoderMotor("ob", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         outtakeTop = setUpEncoderMotor("ot", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
-
+        pushert = hwMap.get(Servo.class, "pst");
+        pusherb = hwMap.get(Servo.class, "psb");
+        gate = hwMap.get(Servo.class, "gs");
     }
 
     /**
@@ -229,10 +233,10 @@ public class Stampede {
      */
     public void drive(double strafeRight, double forward, double turnCW, Telemetry telemetry) {
 
-        double speedfr = forward - strafeRight + turnCW;
-        double speedfl = forward + strafeRight + turnCW;
-        double speedrl = forward - strafeRight - turnCW;
-        double speedrr = forward + strafeRight - turnCW;
+        double speedfr = forward - strafeRight - turnCW;
+        double speedfl = forward + strafeRight - turnCW;
+        double speedrl = forward - strafeRight + turnCW;
+        double speedrr = forward + strafeRight + turnCW;
 
         double max = Math.max(Math.max(Math.abs(speedfl), Math.abs(speedfr)), Math.max(Math.abs(speedrl), Math.abs(speedrr)));
 
@@ -247,6 +251,7 @@ public class Stampede {
         driveRearLeft.setPower(speedrl);
         driveFrontRight.setPower(speedfr);
         driveRearRight.setPower(speedrr);
+        ;
     }
 
     public void driveOther(double inSpeed, double outBottomSpeed, double outTopSpeed, Telemetry telemetry) {

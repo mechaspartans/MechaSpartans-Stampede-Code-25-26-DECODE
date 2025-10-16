@@ -42,7 +42,7 @@ public class Tele_Op extends OpMode {
     /* Declare OpMode members. */
     Stampede stampede;
     double x1, y1, x2;
-    double outSpeed, inSpeed;
+    double outBottomSpeed, outTopSpeed, inSpeed;
     ElapsedTime holdTimer = new ElapsedTime();
 
     public void initRobot() {
@@ -99,21 +99,40 @@ public class Tele_Op extends OpMode {
             x2 = gamepad1.right_stick_x;
         }
         if (gamepad1.right_trigger > .4) {
-            outSpeed = 0.75;
-        } else {
-            outSpeed = 0;
+            outBottomSpeed = 0.725;
+            outTopSpeed = 0.25;
+        } else if (!gamepad1.right_bumper) {
+            outBottomSpeed = 0;
+            outTopSpeed = 0;
+        }
+        if (gamepad1.right_bumper) {
+            outBottomSpeed = 1;
+            outTopSpeed = 0.25;
+        } else if (gamepad1.right_trigger < .4){
+            outBottomSpeed = 0;
+            outTopSpeed = 0;
         }
         if (gamepad1.left_trigger > .4) {
             inSpeed = 0.75;
         } else {
             inSpeed = 0;
         }
+        if (gamepad1.a) {
+            stampede.pushert.setPosition(0);
+            //stampede.gate.setPosition(0);
+        } else {
+            stampede.pusherb.setPosition(0);
+            stampede.pushert.setPosition(0.5);
+            //stampede.gate.setPosition(0.5);
+        }
+
         x1 *= 0.75;
         y1 *= 0.75;
         x2 *= 0.75;
         stampede.drive(y1, x1, x2, telemetry);
-        stampede.driveOther(-inSpeed, -outSpeed, -outSpeed, telemetry);
+        stampede.driveOther(-inSpeed, -outBottomSpeed, -outTopSpeed, telemetry);
         telemetry.addData("Autoturning Active", corrected ? "Yes" : "No");
+
 
         stampede.updateFieldPosition();
         stampede.reportTelemetry(telemetry);
