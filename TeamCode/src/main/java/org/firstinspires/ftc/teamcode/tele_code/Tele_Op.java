@@ -99,32 +99,41 @@ public class Tele_Op extends OpMode {
             x2 = gamepad1.right_stick_x;
         }
         if (gamepad1.right_trigger > .4) {
-            outBottomSpeed = 0.725;
-            outTopSpeed = 0.25;
+            outBottomSpeed = 0.5;
+            outTopSpeed = 0.75;
         } else if (!gamepad1.right_bumper) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
         if (gamepad1.right_bumper) {
-            outBottomSpeed = 1;
-            outTopSpeed = 0.25;
-        } else if (gamepad1.right_trigger < .4){
+            outBottomSpeed = 0.825;
+            outTopSpeed = 0.65;
+        } else if (gamepad1.right_trigger < .4) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
+
         if (gamepad1.left_trigger > .4) {
             inSpeed = 0.75;
-        } else {
+        } else if (gamepad1.left_trigger < .4) {
             inSpeed = 0;
         }
-        if (gamepad1.a) {
-            stampede.pushert.setPosition(0);
-            //stampede.gate.setPosition(0);
-        } else {
-            stampede.pusherb.setPosition(0);
-            stampede.pushert.setPosition(0.5);
-            //stampede.gate.setPosition(0.5);
-        }
+         if (gamepad1.left_bumper) {
+          inSpeed = -0.75;
+         } else if (gamepad1.left_bumper) {
+             inSpeed = 0;
+         }
+
+
+//Nevin Coded 10/20/20252
+    //if (gamepad1.a) {
+    // stampede.pushert.setPosition(0);
+    //stampede.gate.setPosition(0);
+    // } else {
+    // stampede.pusherb.setPosition(0);
+    //stampede.pushert.setPosition(0.5);
+    //stampede.gate.setPosition(0.5);
+//ng251022}
 
         x1 *= 0.75;
         y1 *= 0.75;
