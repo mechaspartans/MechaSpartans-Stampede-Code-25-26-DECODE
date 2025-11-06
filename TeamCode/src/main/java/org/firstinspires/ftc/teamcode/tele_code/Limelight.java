@@ -62,7 +62,7 @@ public class Limelight extends LinearOpMode {
                         } else if (result.getTa() >= 1.1) {
                             stampede.drive(-0.25, 0, 0, telemetry);
                         } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {
-                            if (result.getBotpose().getPosition().y >= 0.1) {
+                            if (result.getBotpose().getPosition().x >= 0.1) {
                                 stampede.drive(0, 0.25, 0, telemetry);
                             } else if (result.getBotpose().getPosition().y <= -0.1)
                                 stampede.drive(0, -0.25, 0, telemetry);
