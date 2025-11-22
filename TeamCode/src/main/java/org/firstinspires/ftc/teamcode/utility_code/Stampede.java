@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.utility_code;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -18,6 +20,7 @@ import org.apache.commons.math3.linear.LUDecomposition;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 /**
  * This is NOT an opmode.
@@ -31,6 +34,7 @@ public class Stampede {
     public DcMotorEx driveRearLeft = null;
     public DcMotorEx driveRearRight = null;
     public DcMotorEx intake;
+    public DcMotorEx mintake;
     public DcMotorEx outtakeTop;
     public DcMotorEx outtakeBottom;
     public Servo pushert = null;
@@ -39,6 +43,7 @@ public class Stampede {
     public DcMotorEx odopodLeft = null;
     public DcMotorEx odopodRight = null;
     public DcMotorEx odopodMiddle = null;
+    public Limelight3A limelight;
 
     public SparkFunOTOS otos = null;
 
@@ -177,6 +182,7 @@ public class Stampede {
         intake = setUpEncoderMotor("in", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         outtakeBottom = setUpEncoderMotor("ob", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         outtakeTop = setUpEncoderMotor("ot", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
+        mintake = setUpEncoderMotor("feeder", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         pushert = hwMap.get(Servo.class, "pst");
         pusherb = hwMap.get(Servo.class, "psb");
         gate = hwMap.get(Servo.class, "gs");
@@ -199,8 +205,10 @@ public class Stampede {
         hwMap = ahwMap;
 
         // If using wheel encoders pass true, otherwise pass false
-        initWheelHardware(false);
-        initOtherHardware(false);
+        initWheelHardware(true);
+        initOtherHardware(true);
+        limelight = hwMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
         // If using odometry pods pass true, otherwise pass false
         if (false) {
             odopodLeft = hwMap.get(DcMotorEx.class, "odoleft");
@@ -254,10 +262,47 @@ public class Stampede {
         ;
     }
 
-    public void driveOther(double inSpeed, double outBottomSpeed, double outTopSpeed, Telemetry telemetry) {
+    public void driveOther(double inSpeed, double minSpeed, double outBottomSpeed, double outTopSpeed, Telemetry telemetry) {
         intake.setPower(inSpeed);
+        mintake.setPower(minSpeed);
         outtakeBottom.setPower(outBottomSpeed);
         outtakeTop.setPower(outTopSpeed);
+    }
+
+    public void limelightPositioning(Telemetry telemetry) {
+        limelight.start();
+        LLResult result = limelight.getLatestResult();
+        if (result != null) {
+            if (result.isValid()) {
+                Pose3D botpose = result.getBotpose();
+                telemetry.addData("tx", result.getTx());
+                telemetry.addData("ty", result.getTy());
+                telemetry.addData("Botpose", botpose.toString());
+                telemetry.addData("ta", result.getTa());
+                telemetry.update();
+                if (result.getTx() >= 3) {
+                    drive(0, 0, 0.2, telemetry);
+                } else if (result.getTx() <= -3) {
+                    drive(0, 0, -0.2, telemetry);
+                } else if (result.getTx() > -3 && result.getTx() < 3) {
+                    if (result.getTa() <= 0.9) {
+                        drive(0.25, 0, 0, telemetry);
+                    } else if (result.getTa() >= 1.1) {
+                        drive(-0.25, 0, 0, telemetry);
+                    } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {
+                        if (result.getBotpose().getPosition().x >= -0.15) {
+                            drive(0, -0.5, 0, telemetry);
+                        } else if (result.getBotpose().getPosition().x <= -0.3) {
+                            drive(0, 0.5, 0, telemetry);
+                        } else {
+                            drive(0, 0, 0, telemetry);
+
+                            limelight.stop();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

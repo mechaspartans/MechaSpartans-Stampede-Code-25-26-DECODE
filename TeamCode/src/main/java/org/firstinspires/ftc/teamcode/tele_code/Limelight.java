@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.tele_code;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.tan;
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,7 +15,6 @@ import org.firstinspires.ftc.teamcode.utility_code.Stampede;
 public class Limelight extends LinearOpMode {
 
     private Limelight3A limelight;
-
     Stampede stampede;
 
     public void initRobot() {
@@ -52,20 +54,23 @@ public class Limelight extends LinearOpMode {
                     } else {
                         stampede.drive(0, 0, 0, telemetry);
                     }*/
-                    if (result.getTx() >= 2) {
+                    if (result.getTx() >= 3) {
                         stampede.drive(0, 0, 0.2, telemetry);
-                    } else if (result.getTx() <= -2) {
+                    } else if (result.getTx() <= -3) {
                         stampede.drive(0, 0, -0.2, telemetry);
-                    } else if (result.getTx() > -2 && result.getTx() < 2) {
+                    } else if (result.getTx() > -3 && result.getTx() < 3) {
                         if (result.getTa() <= 0.9) {
                             stampede.drive(0.25, 0, 0, telemetry);
                         } else if (result.getTa() >= 1.1) {
                             stampede.drive(-0.25, 0, 0, telemetry);
                         } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {
-                            if (result.getBotpose().getPosition().x >= 0.1) {
-                                stampede.drive(0, 0.25, 0, telemetry);
-                            } else if (result.getBotpose().getPosition().x <= -0.1)
-                                stampede.drive(0, -0.25, 0, telemetry);
+                            if (result.getBotpose().getPosition().x >= -0.15) {
+                                stampede.drive(0, -0.5, 0, telemetry);
+                            } else if (result.getBotpose().getPosition().x <= -0.3) {
+                                stampede.drive(0, 0.5, 0, telemetry);
+                            } else {
+                                stampede.drive(0, 0, 0, telemetry);
+                            }
                         }
                     }
                 }

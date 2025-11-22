@@ -42,7 +42,7 @@ public class Tele_Op extends OpMode {
     /* Declare OpMode members. */
     Stampede stampede;
     double x1, y1, x2;
-    double outBottomSpeed, outTopSpeed, inSpeed;
+    double outBottomSpeed, outTopSpeed, inSpeed, minSpeed;
     ElapsedTime holdTimer = new ElapsedTime();
 
     public void initRobot() {
@@ -99,30 +99,35 @@ public class Tele_Op extends OpMode {
             x2 = gamepad1.right_stick_x;
         }
         if (gamepad1.right_trigger > .4) {
-            outBottomSpeed = 0.5;
-            outTopSpeed = 0.75;
+            outBottomSpeed = 0.64;
+            outTopSpeed = 0.64;
         } else if (!gamepad1.right_bumper) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
         if (gamepad1.right_bumper) {
-            outBottomSpeed = 0.825;
-            outTopSpeed = 0.65;
+            outBottomSpeed = 0.65;
+            outTopSpeed = 0.75;
         } else if (gamepad1.right_trigger < .4) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
 
         if (gamepad1.left_trigger > .4) {
-            inSpeed = 0.75;
+            inSpeed = 1;
         } else if (gamepad1.left_trigger < .4) {
             inSpeed = 0;
         }
-         if (gamepad1.left_bumper) {
-          inSpeed = -0.75;
-         } else if (gamepad1.left_bumper) {
-             inSpeed = 0;
+        if (gamepad1.left_bumper) {
+            minSpeed = 1;
+         } else if (!gamepad1.left_bumper) {
+            minSpeed = 0;
          }
+        if (gamepad1.a) {
+            stampede.limelightPositioning(telemetry);
+        }
+
+        //
 
 
 //Nevin Coded 10/20/20252
@@ -139,7 +144,7 @@ public class Tele_Op extends OpMode {
         y1 *= 0.75;
         x2 *= 0.75;
         stampede.drive(y1, x1, x2, telemetry);
-        stampede.driveOther(-inSpeed, -outBottomSpeed, -outTopSpeed, telemetry);
+        stampede.driveOther(-inSpeed, -minSpeed, -outBottomSpeed, -outTopSpeed, telemetry);
         telemetry.addData("Autoturning Active", corrected ? "Yes" : "No");
 
 
