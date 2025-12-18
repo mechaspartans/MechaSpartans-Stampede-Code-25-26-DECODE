@@ -258,9 +258,11 @@ public class Stampede {
         driveRearRight.setPower(speedrr);
     }
 
-    public void driveOther(double inSpeed, double minSpeed, double outBottomSpeed, double outTopSpeed, Telemetry telemetry) {
+    public void driveIntake(double inSpeed, double minSpeed, Telemetry telemetry) {
         intake.setPower(inSpeed);
         mintake.setPower(minSpeed);
+    }
+    public void driveOuttake(double outBottomSpeed, double outTopSpeed, Telemetry telemetry) {
         outtakeBottom.setPower(outBottomSpeed);
         outtakeTop.setPower(outTopSpeed);
     }
