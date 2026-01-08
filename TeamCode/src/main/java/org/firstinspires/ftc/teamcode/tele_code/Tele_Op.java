@@ -148,7 +148,7 @@ public class Tele_Op extends OpMode {
         x1 *= 0.75;
         y1 *= 0.75;
         x2 *= 0.75;
-        stampede.drive(y1, x1, x2, telemetry);
+        if (!gamepad1.a) {stampede.drive(y1, x1, x2, telemetry);}
         stampede.driveIntake(-inSpeed, -minSpeed, telemetry);
         stampede.driveOuttake(-outBottomSpeed, -outTopSpeed, telemetry);
         telemetry.addData("Autoturning Active", corrected ? "Yes" : "No");

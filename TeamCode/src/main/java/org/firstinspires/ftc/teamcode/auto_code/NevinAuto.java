@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-@Autonomous(name = "AUTO", group = "Autonomous")
+@Autonomous(name = "NEVIN_AUTO", group = "Autonomous")
 public class NevinAuto extends OpMode {
     boolean isRed = false;
     boolean isAudience = false;
@@ -38,23 +38,23 @@ public class NevinAuto extends OpMode {
         driveTo = new DriveTo(stampede, telemetry);
 
         //x, y, heading for start positions
-        drivePositionsAudienceRed.put("start", new double[]{-63.75, -24, 0});
-        drivePositionsAudienceBlue.put("start", new double[]{-63.75, 24, 0});
+        drivePositionsAudienceRed.put("start", new double[]{63.75, 24, 180});
+        drivePositionsAudienceBlue.put("start", new double[]{63.75, -24, 180});
         drivePositionsBackRed.put("start", new double[]{12, -63, 90});
         drivePositionsBackBlue.put("start", new double[]{12, 63, -90});
 
-        drivePositionsAudienceRed.put("Position 1", new double[]{12, -12, -45});
-        drivePositionsAudienceBlue.put("Position 1", new double[]{12, 12, 45});
+        drivePositionsAudienceRed.put("Position 1", new double[]{-12, 12, 135});
+        drivePositionsAudienceBlue.put("Position 1", new double[]{-12, -12, -135});
         drivePositionsBackRed.put("Position 1", new double[]{12, -40, 90});
         drivePositionsBackBlue.put("Position 1", new double[]{36, 40, -90});
 
-        drivePositionsAudienceRed.put("Position 2", new double[]{24, -48, 135});
-        drivePositionsAudienceBlue.put("Position 2", new double[]{-48, 60, 0});
+        drivePositionsAudienceRed.put("Position 2", new double[]{-12, 36, -90});
+        drivePositionsAudienceBlue.put("Position 2", new double[]{-12, -36, 90});
         drivePositionsBackRed.put("Position 2", new double[]{48, -60, 0});
         drivePositionsBackBlue.put("Position 2", new double[]{-24, 48, 135 + 180});
 
-        drivePositionsAudienceRed.put("Position 3", new double[]{48, -60, 135});
-        drivePositionsAudienceBlue.put("Position 3", new double[]{-48, -48, 0});
+        drivePositionsAudienceRed.put("Position 3", new double[]{-12, 58, -90});
+        drivePositionsAudienceBlue.put("Position 3", new double[]{-12, -58, 90});
         drivePositionsBackRed.put("Position 3", new double[]{48, -48, 0});
         drivePositionsBackBlue.put("Position 3", new double[]{-48, 60, 135 + 180});
     }
@@ -163,20 +163,35 @@ public class NevinAuto extends OpMode {
 
     // This is the State Machine, it's the "steps" the robot will follow.
     public void actionStart() {
-        driveTo.setTargetPosition(drivePositions.get("Position 1"), .25);
+        driveTo.setTargetPosition(drivePositions.get("Position 1"), .75);
         // This is how you can add a wait.
         //wait = getRuntime() + 5;
         // Name what the next action should be.
-        stampede.driveOuttake(-0.43, -0.43, telemetry);
+        stampede.driveOuttake(-0.41, -0.43, telemetry);
+        stampede.driveIntake(-0.15,  0, telemetry);
+        stampede.pusher.setPosition(.75);
+        nextState = "actionAim";
+    }
+    public void actionAim() {
+        for(int i=1;i<1000;i++) {
+            stampede.limelightPositioning(telemetry);
+        }
         nextState = "actionShoot";
     }
     public void actionShoot() {
         stampede.driveIntake(-1, -1, telemetry);
+        stampede.pusher.setPosition(0);
+        wait = getRuntime() +1;
         nextState = "actionStep2";
     }
     public void actionStep2() {
         // stopBetween is whether the robot will stop between positions, or just drive through the position.
         driveTo.setTargetPosition(drivePositions.get("Position 2"), .25, false);
+        stampede.pusher.setPosition(1);
+        nextState = "actionNoShoot";
+    }
+    public void actionNoShoot() {
+        stampede.driveIntake(-0.5, 0, telemetry);
         nextState = "actionStep3";
     }
 

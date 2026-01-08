@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.utility_code.Stampede;
 
-@TeleOp
+@TeleOp(name = "LIMELIGHT")
 public class Limelight extends LinearOpMode {
 
     private Limelight3A limelight;

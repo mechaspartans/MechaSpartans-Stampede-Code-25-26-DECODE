@@ -78,29 +78,29 @@ public class Stampede {
      *
      * Total left odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign).
      */
-    static double LEFT_ENCODER_FORWARD_VALUE = -31297 + -31422 + -31945 + -31571;
+    static double LEFT_ENCODER_FORWARD_VALUE = 48698 + 48654 + 48791 + 48577;
     /** Total middle odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_FORWARD_VALUE = -398 + -840 + -669 + -686;
+    static double MIDDLE_ENCODER_FORWARD_VALUE = 1069 + 189 + 13 + 55;
     /** Total right odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_FORWARD_VALUE = -32007 + -32042 + -31976 + -31996;
+    static double RIGHT_ENCODER_FORWARD_VALUE = -48650 + -48367 + -48962 + -48600;
     /** Decided distance from encoder forward value tests (we drove forward 96in) times number of tests (in inches). */
     static double FORWARD_TRAVEL = 96 * 4;
 
     /** Total left odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double LEFT_ENCODER_STRAFE_VALUE = 727 + 94 + -187 + 1597;
+    static double LEFT_ENCODER_STRAFE_VALUE = -538 + 823 + 800 + -526;
     /** Total middle odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_STRAFE_VALUE = -31983 + -32027 + -32093 + -31979;
+    static double MIDDLE_ENCODER_STRAFE_VALUE = -48403 + -48480 + -48694 + -48316;
     /** Total right odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_STRAFE_VALUE = -455 + -1147 + -1384 + -204;
+    static double RIGHT_ENCODER_STRAFE_VALUE = 400 + -405 + -310 + 246;
     /** Decided distance from encoder strafe value tests (we strafed right 96in) times number of tests (in inches). */
     static double STRAFE_TRAVEL = 96 * 4;
 
     /** Total left odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double LEFT_ENCODER_CW_TURN = 132984 + 133344 + 138101 + 137789;
+    static double LEFT_ENCODER_CW_TURN = 208965 + 200065 + 202352 + 200846;
     /** Total middle odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_CW_TURN = 74385 + 73464 + 86852 + 86790;
+    static double MIDDLE_ENCODER_CW_TURN = -182392 + -190451 + -192722 + -191072;
     /** Total right odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_CW_TURN = -126787 + -126350 + -120872 + -121079;
+    static double RIGHT_ENCODER_CW_TURN = 213772 + 223687 + 221388 + 222472;
     /**
      * Decided amount from encoder spinning value tests [we spun clockwise (CW) ten times (3600 degrees)] times number
      * of tests (in inches).
@@ -176,7 +176,7 @@ public class Stampede {
 
         hasWheelEncoders = withEncoder;
     }
-
+//ng181225
     public void initOtherHardware(boolean withEncoder) {
         intake = setUpEncoderMotor("in", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         outtakeBottom = setUpEncoderMotor("ob", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
@@ -202,15 +202,15 @@ public class Stampede {
         hwMap = ahwMap;
 
         // If using wheel encoders pass true, otherwise pass false
-        initWheelHardware(true);
+        initWheelHardware(false);
         initOtherHardware(true);
         limelight = hwMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
         // If using odometry pods pass true, otherwise pass false
-        if (false) {
-            odopodLeft = hwMap.get(DcMotorEx.class, "odoleft");
-            odopodRight = hwMap.get(DcMotorEx.class, "odoright");
-            odopodMiddle = hwMap.get(DcMotorEx.class, "odomid");
+        if (true) {
+            odopodLeft = driveFrontRight;
+            odopodRight = driveFrontLeft;
+            odopodMiddle = driveRearLeft;
         }
         // If using SparkFun otos pass true, otherwise pass false
         if (false) {
