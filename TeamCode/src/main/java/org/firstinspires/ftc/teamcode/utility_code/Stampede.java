@@ -203,14 +203,17 @@ public class Stampede {
 
         // If using wheel encoders pass true, otherwise pass false
         initWheelHardware(false);
+        initWheelHardware(false);
         initOtherHardware(true);
         limelight = hwMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
+
+        limelight.start();
         // If using odometry pods pass true, otherwise pass false
         if (true) {
-            odopodLeft = driveFrontRight;
-            odopodRight = driveFrontLeft;
-            odopodMiddle = driveRearLeft;
+            odopodLeft = driveRearLeft;
+            odopodRight = driveRearRight;
+            odopodMiddle = driveFrontRight;
         }
         // If using SparkFun otos pass true, otherwise pass false
         if (false) {
@@ -238,10 +241,10 @@ public class Stampede {
      */
     public void drive(double strafeRight, double forward, double turnCW, Telemetry telemetry) {
 
-        double speedfr = forward - strafeRight - turnCW;
-        double speedfl = forward + strafeRight - turnCW;
-        double speedrl = forward - strafeRight + turnCW;
-        double speedrr = forward + strafeRight + turnCW;
+        double speedfr = forward - strafeRight + turnCW;
+        double speedfl = forward + strafeRight + turnCW;
+        double speedrl = forward - strafeRight - turnCW;
+        double speedrr = forward + strafeRight - turnCW;
 
         double max = Math.max(Math.max(Math.abs(speedfl), Math.abs(speedfr)), Math.max(Math.abs(speedrl), Math.abs(speedrr)));
 
@@ -303,7 +306,6 @@ public class Stampede {
                         } else {
                             drive(0, 0, 0, telemetry);
 
-                            limelight.stop();
                         }
                     }
                 }
