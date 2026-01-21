@@ -108,15 +108,15 @@ public class Tele_Op extends OpMode {
             x2 = 0;
         }
         if (gamepad1.right_trigger > .4) {
-            outBottomSpeed = 0.43;
-            outTopSpeed = 0.43;
+            outBottomSpeed = 0.32;
+            outTopSpeed = 0.32;
         } else if (!gamepad1.right_bumper) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
         if (gamepad1.right_bumper) {
-            outBottomSpeed = 0.55;
-            outTopSpeed = 0.6;
+            outBottomSpeed = 0.43;
+            outTopSpeed = 0.43;
         } else if (gamepad1.right_trigger < .4) {
             outBottomSpeed = 0;
             outTopSpeed = 0;

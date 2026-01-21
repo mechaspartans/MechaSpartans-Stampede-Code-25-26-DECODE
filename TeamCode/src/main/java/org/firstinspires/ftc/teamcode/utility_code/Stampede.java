@@ -78,29 +78,29 @@ public class Stampede {
      *
      * Total left odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign).
      */
-    static double LEFT_ENCODER_FORWARD_VALUE = 48698 + 48654 + 48791 + 48577;
+    static double LEFT_ENCODER_FORWARD_VALUE = 48935 + 48796 + 48789 + 48621;//48698 + 48654 + 48791 + 48577;
     /** Total middle odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_FORWARD_VALUE = 1069 + 189 + 13 + 55;
+    static double MIDDLE_ENCODER_FORWARD_VALUE = 516 + 610 + 18 + 86;//1069 + 189 + 13 + 55;
     /** Total right odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_FORWARD_VALUE = -48650 + -48367 + -48962 + -48600;
+    static double RIGHT_ENCODER_FORWARD_VALUE = -48603 - 48454 - 48480 - 48343;//-48650 + -48367 + -48962 + -48600;
     /** Decided distance from encoder forward value tests (we drove forward 96in) times number of tests (in inches). */
     static double FORWARD_TRAVEL = 96 * 4;
 
     /** Total left odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double LEFT_ENCODER_STRAFE_VALUE = -538 + 823 + 800 + -526;
+    static double LEFT_ENCODER_STRAFE_VALUE = -111 + 32 + 776 + 368;//-538 + 823 + 800 + -526;
     /** Total middle odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_STRAFE_VALUE = -48403 + -48480 + -48694 + -48316;
+    static double MIDDLE_ENCODER_STRAFE_VALUE = -48404 - 48364 - 47621 - 48400;//-48403 + -48480 + -48694 + -48316;
     /** Total right odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_STRAFE_VALUE = 400 + -405 + -310 + 246;
+    static double RIGHT_ENCODER_STRAFE_VALUE = -31 + 225 - 145 - 504;//400 + -405 + -310 + 246;
     /** Decided distance from encoder strafe value tests (we strafed right 96in) times number of tests (in inches). */
     static double STRAFE_TRAVEL = 96 * 4;
 
     /** Total left odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double LEFT_ENCODER_CW_TURN = 208965 + 200065 + 202352 + 200846;
+    static double LEFT_ENCODER_CW_TURN = 206190 + 204601 + 203792 + 204179;//208965 + 200065 + 202352 + 200846;
     /** Total middle odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_CW_TURN = -182392 + -190451 + -192722 + -191072;
+    static double MIDDLE_ENCODER_CW_TURN = -193511 - 193344 - 194106 - 195023;//-182392 + -190451 + -192722 + -191072;
     /** Total right odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_CW_TURN = 213772 + 223687 + 221388 + 222472;
+    static double RIGHT_ENCODER_CW_TURN = 216390 + 218016 + 219034 + 217920;//213772 + 223687 + 221388 + 222472;
     /**
      * Decided amount from encoder spinning value tests [we spun clockwise (CW) ten times (3600 degrees)] times number
      * of tests (in inches).
