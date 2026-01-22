@@ -196,8 +196,8 @@ public class NevinAuto extends OpMode {
         //wait = getRuntime() + 5;
         // Name what the next action should be.
         stampede.driveOuttake(0.41, 0.41, telemetry);
-        stampede.driveIntake(0.15,  0, telemetry);
-        stampede.pusher.setPosition(.75);
+        stampede.driveIntake(0.2,  0, telemetry);
+        stampede.pusher.setPosition(.5);
         nextState = "actionShoot";
     }
     /*public void actionAim() {

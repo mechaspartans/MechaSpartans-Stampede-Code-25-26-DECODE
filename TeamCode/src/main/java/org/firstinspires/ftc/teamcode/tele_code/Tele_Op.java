@@ -108,8 +108,8 @@ public class Tele_Op extends OpMode {
             x2 = 0;
         }
         if (gamepad1.right_trigger > .4) {
-            outBottomSpeed = 0.32;
-            outTopSpeed = 0.32;
+            outBottomSpeed = 0.41;
+            outTopSpeed = 0.41;
         } else if (!gamepad1.right_bumper) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
@@ -133,7 +133,15 @@ public class Tele_Op extends OpMode {
             minSpeed = 0;
         }
         if (gamepad1.a) {
-            stampede.limelightPositioning(telemetry);
+            stampede.limelightPositioningClose(telemetry);
+        }
+        if (gamepad1.b) {
+            stampede.limelightPositioningFar(telemetry);
+        }
+        if(gamepad1.y) {
+            stampede.kickstand.setPosition(1);
+        }else {
+            stampede.kickstand.setPosition(0);
         }
         if (gamepad1.x) {
             stampede.pusher.setPosition(0);
@@ -157,7 +165,7 @@ public class Tele_Op extends OpMode {
         x1 *= 0.75;
         y1 *= 0.75;
         x2 *= 0.75;
-        if (!gamepad1.a) {stampede.drive(y1, x1, x2, telemetry);}
+        if (!gamepad1.a && !gamepad1.b) {stampede.drive(y1, x1, x2, telemetry);}
         stampede.driveIntake(inSpeed, minSpeed, telemetry);
         stampede.driveOuttake(outBottomSpeed, outTopSpeed, telemetry);
         telemetry.addData("Autoturning Active", corrected ? "Yes" : "No");

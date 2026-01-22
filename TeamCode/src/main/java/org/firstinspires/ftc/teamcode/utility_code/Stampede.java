@@ -39,6 +39,8 @@ public class Stampede {
     public DcMotorEx outtakeTop;
     public DcMotorEx outtakeBottom;
     public Servo pusher = null;
+
+    public Servo kickstand = null;
     public DcMotorEx odopodLeft = null;
     public DcMotorEx odopodRight = null;
     public DcMotorEx odopodMiddle = null;
@@ -183,6 +185,7 @@ public class Stampede {
         outtakeTop = setUpEncoderMotor("ot", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         mintake = setUpEncoderMotor("feeder", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         pusher = hwMap.get(Servo.class, "ps");
+        kickstand = hwMap.get(Servo.class, "ks");
     }
 
     /**
@@ -278,7 +281,7 @@ public class Stampede {
         }
     }
 
-    public void limelightPositioning(Telemetry telemetry) {
+    public void limelightPositioningClose(Telemetry telemetry) {
         limelight.start();
         LLResult result = limelight.getLatestResult();
         if (result != null) {
@@ -299,15 +302,47 @@ public class Stampede {
                     } else if (result.getTa() >= 1.1) {
                         drive(-0.25, 0, 0, telemetry);
                     } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {
-                        if (result.getBotpose().getPosition().x >= -0.15) {
+                        /*if (result.getBotpose().getPosition().x >= -0.15) {
                             drive(0, -0.5, 0, telemetry);
                         } else if (result.getBotpose().getPosition().x <= -0.3) {
                             drive(0, 0.5, 0, telemetry);
                         } else {
                             drive(0, 0, 0, telemetry);
-
-                        }
+                        }*/
                     }
+                }
+            }
+        }
+    }
+    public void limelightPositioningFar(Telemetry telemetry) {
+        limelight.start();
+        LLResult result = limelight.getLatestResult();
+        if (result != null) {
+            if (result.isValid()) {
+                Pose3D botpose = result.getBotpose();
+                telemetry.addData("tx", result.getTx());
+                telemetry.addData("ty", result.getTy());
+                telemetry.addData("Botpose", botpose.toString());
+                telemetry.addData("ta", result.getTa());
+                telemetry.update();
+                if (result.getTx() >= 3) {
+                    drive(0, 0, 0.2, telemetry);
+                } else if (result.getTx() <= -1) {
+                    drive(0, 0, -0.2, telemetry);
+                } else if (result.getTx() > -3 && result.getTx() < 3) {
+                    /*if (result.getTa() <= 0.9) {
+                        drive(0.25, 0, 0, telemetry);
+                    } else if (result.getTa() >= 1.1) {
+                        drive(-0.25, 0, 0, telemetry);
+                    } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {*/
+                        //if (result.getBotpose().getPosition().x >= -0.15) {
+                            //drive(0, -0.5, 0, telemetry);
+                        //} else if (result.getBotpose().getPosition().x <= -0.3) {
+                            //drive(0, 0.5, 0, telemetry);
+                        //} else {
+                            //drive(0, 0, 0, telemetry);
+                        //}
+                    //}
                 }
             }
         }
