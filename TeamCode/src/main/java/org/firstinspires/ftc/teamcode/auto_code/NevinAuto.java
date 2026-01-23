@@ -23,7 +23,7 @@ public class NevinAuto extends OpMode {
 
     final double METERS_TO_INCHES = 39.3701;
 
-    int counter = 0;
+    int counter = -1;
 
     DriveTo driveTo;
     Stampede stampede;
@@ -62,10 +62,16 @@ public class NevinAuto extends OpMode {
         drivePositionsBackRed.put("Position 2", new double[]{48, -60, 0});
         drivePositionsBackBlue.put("Position 2", new double[]{-24, 48, 135 + 180});
 
-        drivePositionsAudienceRed.put("Position 3", new double[]{-12, 50, -90});
+        drivePositionsAudienceRed.put("Position 3", new double[]{-12, 45, -90});
         drivePositionsAudienceBlue.put("Position 3", new double[]{-12, -50, 90});
         drivePositionsBackRed.put("Position 3", new double[]{48, -48, 0});
         drivePositionsBackBlue.put("Position 3", new double[]{-48, 60, 135 + 180});
+
+        drivePositionsAudienceRed.put("Position 4", new double[]{12, 24, -90});
+        drivePositionsAudienceBlue.put("Position 4", new double[]{12, -24, 90});
+
+        drivePositionsAudienceRed.put("Position 5", new double[]{12, 45, -90});
+        drivePositionsAudienceBlue.put("Position 5", new double[]{12, -45, 90});
     }
 
     @Override
@@ -195,7 +201,7 @@ public class NevinAuto extends OpMode {
         // This is how you can add a wait.
         //wait = getRuntime() + 5;
         // Name what the next action should be.
-            stampede.driveOuttake(0.40, 0.41, telemetry);
+            stampede.driveOuttake(0.41, 0.41, telemetry);
         stampede.driveIntake(0.2,  0, telemetry);
         stampede.pusher.setPosition(.5);
         nextState = "actionShoot";
@@ -210,21 +216,26 @@ public class NevinAuto extends OpMode {
     }*/
     public void actionShoot() {
         stampede.driveIntake(1, .5, telemetry);
-        wait = getRuntime() +.5;
+        stampede.pusher.setPosition(1);
+        wait = getRuntime() +.75;
         stampede.pusher.setPosition(0);
-        wait = getRuntime() +3;
+        wait = getRuntime() +2;
         nextState = "actionNoShoot";
     }
     public void actionStep2() {
         // stopBetween is whether the robot will stop between positions, or just drive through the position.
         driveTo.setTargetPosition(drivePositions.get("Position 2"), .25, false);
         stampede.pusher.setPosition(1);
+        stampede.driveIntake(1, 0, telemetry);
         nextState = "actionStep3";
     }
     public void actionNoShoot() {
         stampede.driveIntake(1, 0, telemetry);
-        if (counter == 0) {
+        stampede.driveOuttake(0, 0, telemetry);
+        if (counter == -1) {
             nextState = "actionStep2";
+        } else if (counter == 0) {
+            nextState = "actionStep4";
         } else {
             nextState = "actionStop";
         }
@@ -235,12 +246,30 @@ public class NevinAuto extends OpMode {
         counter++;
         stampede.drive(0,0,0,telemetry);
         stampede.driveOuttake(0, 0, telemetry);
+        stampede.driveIntake(1, 0, telemetry);
+        nextState = "actionStart";
+    }
+
+    public void actionStep4() {
+        driveTo.setTargetPosition(drivePositions.get("Position 4"), .25);
+        stampede.pusher.setPosition(1);
+        nextState = "actionStep5";
+    }
+
+    public void actionStep5() {
+        driveTo.setTargetPosition(drivePositions.get("Position 5"), .5);
+        counter++;
+        stampede.drive(0, 0, 0, telemetry);
+        stampede.driveOuttake(0, 0, telemetry);
+        stampede.driveIntake(1, 0, telemetry);
         nextState = "actionStart";
     }
 
     public void actionStop() {
-        stampede.drive(0.0, 0.0, 0.0, telemetry);
+        stampede.drive(0.0, -0.3, 0.0, telemetry);
         driveTo.areWeThereYet = true;
+        stampede.driveOuttake(0, 0, telemetry);
+        stampede.driveIntake(0, 0, telemetry);
         nextState = "actionDone";
     }
 }

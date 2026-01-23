@@ -242,12 +242,12 @@ public class Stampede {
      * @param turnCW      speed turn [-1, 1]
      * @param telemetry
      */
-    public void drive(double strafeRight, double forward, double turnCW, Telemetry telemetry) {
+    public void drive(double forward, double strafeRight, double turnCW, Telemetry telemetry) {
 
-        double speedfr = forward - strafeRight + turnCW;
-        double speedfl = forward + strafeRight + turnCW;
-        double speedrl = forward - strafeRight - turnCW;
-        double speedrr = forward + strafeRight - turnCW;
+        double speedfr = strafeRight - forward + turnCW;
+        double speedfl = strafeRight + forward + turnCW;
+        double speedrl = strafeRight - forward - turnCW;
+        double speedrr = strafeRight + forward - turnCW;
 
         double max = Math.max(Math.max(Math.abs(speedfl), Math.abs(speedfr)), Math.max(Math.abs(speedrl), Math.abs(speedrr)));
 
