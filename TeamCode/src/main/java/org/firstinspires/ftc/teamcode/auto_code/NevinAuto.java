@@ -49,29 +49,41 @@ public class NevinAuto extends OpMode {
         //x, y, heading for start positions
         drivePositionsAudienceRed.put("start", new double[]{63.75, 24, 180});
         drivePositionsAudienceBlue.put("start", new double[]{63.75, -24, 180});
-        drivePositionsBackRed.put("start", new double[]{12, -63, 90});
-        drivePositionsBackBlue.put("start", new double[]{12, 63, -90});
+        drivePositionsBackRed.put("start", new double[]{-50, 50, 135});
+        drivePositionsBackBlue.put("start", new double[]{-50, -50, -135});
 
-        drivePositionsAudienceRed.put("Position 1", new double[]{-12, 12, 135});
-        drivePositionsAudienceBlue.put("Position 1", new double[]{-12, -12, -135});
-        drivePositionsBackRed.put("Position 1", new double[]{12, -40, 90});
-        drivePositionsBackBlue.put("Position 1", new double[]{36, 40, -90});
+        drivePositionsAudienceRed.put("Position 1", new double[]{57, 13, 155});
+        drivePositionsAudienceBlue.put("Position 1", new double[]{57, -13, -155});
+        drivePositionsBackRed.put("Position 1", new double[]{-12, 12, 135});
+        drivePositionsBackBlue.put("Position 1", new double[]{-12, -12, -135});
 
-        drivePositionsAudienceRed.put("Position 2", new double[]{-12, 24, -90});
-        drivePositionsAudienceBlue.put("Position 2", new double[]{-12, -24, 90});
-        drivePositionsBackRed.put("Position 2", new double[]{48, -60, 0});
-        drivePositionsBackBlue.put("Position 2", new double[]{-24, 48, 135 + 180});
+        drivePositionsAudienceRed.put("Position 2", new double[]{12, 24, -90});
+        drivePositionsAudienceBlue.put("Position 2", new double[]{12, -24, 90});
+        drivePositionsBackRed.put("Position 2", new double[]{-12, 24, -90});
+        drivePositionsBackBlue.put("Position 2", new double[]{-12, -24, 90});
 
-        drivePositionsAudienceRed.put("Position 3", new double[]{-12, 45, -90});
-        drivePositionsAudienceBlue.put("Position 3", new double[]{-12, -50, 90});
-        drivePositionsBackRed.put("Position 3", new double[]{48, -48, 0});
-        drivePositionsBackBlue.put("Position 3", new double[]{-48, 60, 135 + 180});
+        drivePositionsAudienceRed.put("Position 3", new double[]{12, 45, -90});
+        drivePositionsAudienceBlue.put("Position 3", new double[]{12, -45, 90});
+        drivePositionsBackRed.put("Position 3", new double[]{-12, 45, -90});
+        drivePositionsBackBlue.put("Position 3", new double[]{-12, -50, 90});
 
-        drivePositionsAudienceRed.put("Position 4", new double[]{12, 24, -90});
-        drivePositionsAudienceBlue.put("Position 4", new double[]{12, -24, 90});
+        drivePositionsAudienceRed.put("Position 3.5", new double[]{12, 13, -90});
+        drivePositionsAudienceBlue.put("Position 3.5", new double[]{12, -13, 90});
 
-        drivePositionsAudienceRed.put("Position 5", new double[]{12, 45, -90});
-        drivePositionsAudienceBlue.put("Position 5", new double[]{12, -45, 90});
+        drivePositionsAudienceRed.put("Position 4", new double[]{36, 24, -90});
+        drivePositionsAudienceBlue.put("Position 4", new double[]{36, -24, 90});
+        drivePositionsBackRed.put("Position 4", new double[]{12, 24, -90});
+        drivePositionsBackBlue.put("Position 4", new double[]{12, -24, 90});
+
+        drivePositionsAudienceRed.put("Position 5", new double[]{36, 45, -90});
+        drivePositionsAudienceBlue.put("Position 5", new double[]{36, -45, 90});
+        drivePositionsBackRed.put("Position 5", new double[]{12, 45, -90});
+        drivePositionsBackBlue.put("Position 5", new double[]{12, -45, 90});
+
+        drivePositionsAudienceRed.put("Position 6", new double[]{36, 24, -90});
+        drivePositionsAudienceBlue.put("Position 6", new double[]{36, -24, 90});
+        drivePositionsBackRed.put("Position 6", new double[]{12, 45, -90});
+        drivePositionsBackBlue.put("Position 6", new double[]{12, -45, 90});
     }
 
     @Override
@@ -119,25 +131,6 @@ public class NevinAuto extends OpMode {
 
     @Override
     public void loop() {
-        LLResult result = stampede.limelight.getLatestResult();
-        if (result != null) {
-            // Access general information
-            Pose3D botpose = result.getBotpose();
-
-            if (result.isValid()) {
-                //telemetry.addData("tx", result.getTx());
-                //telemetry.addData("txnc", result.getTxNC());
-                //telemetry.addData("ty", result.getTy());
-                //telemetry.addData("tync", result.getTyNC());
-
-                stampede.xFieldPos = botpose.getPosition().x * METERS_TO_INCHES;
-                stampede.yFieldPos = botpose.getPosition().y * METERS_TO_INCHES;
-
-                telemetry.addData("Botpose", botpose.toString());
-            }
-        } else {
-            telemetry.addData("Limelight", "No data available");
-        }
         stampede.updateFieldPosition();
         telemetry.addData("Field Position (Coordinates)", "%.2f, %.2f, %.2f", stampede.xFieldPos, stampede.yFieldPos, stampede.headingField);
         telemetry.addData("IMU Orientation", "IMU %.2f", stampede.angleTracker.getOrientation());
@@ -201,20 +194,18 @@ public class NevinAuto extends OpMode {
         // This is how you can add a wait.
         //wait = getRuntime() + 5;
         // Name what the next action should be.
+        if (isAudience){
+            stampede.driveOuttake(.46, .44, telemetry);
+        }
+        else {
             stampede.driveOuttake(0.41, 0.41, telemetry);
+        }
         stampede.driveIntake(0.2,  0, telemetry);
-        stampede.pusher.setPosition(.5);
         nextState = "actionShoot";
     }
-    /*public void actionAim() {
-            for(int i=1;i<1000;i++) {
-                stampede.limelightPositioning(telemetry);
-            wait = getRuntime() +1;
-        }
-        stampede.drive(0,0, 0, telemetry);
-        nextState = "actionShoot";
-    }*/
+
     public void actionShoot() {
+        wait = getRuntime() + 1;
         stampede.driveIntake(1, .5, telemetry);
         stampede.pusher.setPosition(1);
         wait = getRuntime() +.75;
@@ -224,14 +215,13 @@ public class NevinAuto extends OpMode {
     }
     public void actionStep2() {
         // stopBetween is whether the robot will stop between positions, or just drive through the position.
-        driveTo.setTargetPosition(drivePositions.get("Position 2"), .25, false);
+        driveTo.setTargetPosition(drivePositions.get("Position 2"), .50, false);
         stampede.pusher.setPosition(1);
         stampede.driveIntake(1, 0, telemetry);
         nextState = "actionStep3";
     }
     public void actionNoShoot() {
-        stampede.driveIntake(1, 0, telemetry);
-        stampede.driveOuttake(0, 0, telemetry);
+        stampede.driveIntake(1, -.05, telemetry);
         if (counter == -1) {
             nextState = "actionStep2";
         } else if (counter == 0) {
@@ -245,6 +235,14 @@ public class NevinAuto extends OpMode {
         driveTo.setTargetPosition(drivePositions.get("Position 3"), .5);
         counter++;
         stampede.drive(0,0,0,telemetry);
+        stampede.driveOuttake(0, 0, telemetry);
+        stampede.driveIntake(1, 0, telemetry);
+        nextState = "actionStep35";
+    }
+    public void actionStep35() {
+        driveTo.setTargetPosition(drivePositions.get("Position 3.5"), .5);
+        counter++;
+        stampede.drive(0, 0, 0, telemetry);
         stampede.driveOuttake(0, 0, telemetry);
         stampede.driveIntake(1, 0, telemetry);
         nextState = "actionStart";
@@ -262,11 +260,14 @@ public class NevinAuto extends OpMode {
         stampede.drive(0, 0, 0, telemetry);
         stampede.driveOuttake(0, 0, telemetry);
         stampede.driveIntake(1, 0, telemetry);
-        nextState = "actionStart";
+        if (counter == 1) {
+            driveTo.setTargetPosition(drivePositions.get("Position 6"), .5);
+            nextState = "actionStart";
+        }
     }
 
     public void actionStop() {
-        stampede.drive(0.0, -0.3, 0.0, telemetry);
+        driveTo.setTargetPosition(drivePositions.get("start"), .5);
         driveTo.areWeThereYet = true;
         stampede.driveOuttake(0, 0, telemetry);
         stampede.driveIntake(0, 0, telemetry);
