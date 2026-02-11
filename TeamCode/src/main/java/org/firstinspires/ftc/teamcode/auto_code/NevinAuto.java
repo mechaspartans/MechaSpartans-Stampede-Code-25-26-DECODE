@@ -195,7 +195,7 @@ public class NevinAuto extends OpMode {
         //wait = getRuntime() + 5;
         // Name what the next action should be.
         if (isAudience){
-            stampede.driveOuttake(.46, .44, telemetry);
+            stampede.driveOuttake(.50, .44, telemetry);
         }
         else {
             stampede.driveOuttake(0.41, 0.41, telemetry);
@@ -240,11 +240,7 @@ public class NevinAuto extends OpMode {
         nextState = "actionStep35";
     }
     public void actionStep35() {
-        driveTo.setTargetPosition(drivePositions.get("Position 3.5"), .5);
-        counter++;
-        stampede.drive(0, 0, 0, telemetry);
-        stampede.driveOuttake(0, 0, telemetry);
-        stampede.driveIntake(1, 0, telemetry);
+        driveTo.setTargetPosition(drivePositions.get("Position 2"), .5);
         nextState = "actionStart";
     }
 
@@ -257,17 +253,13 @@ public class NevinAuto extends OpMode {
     public void actionStep5() {
         driveTo.setTargetPosition(drivePositions.get("Position 5"), .5);
         counter++;
-        stampede.drive(0, 0, 0, telemetry);
         stampede.driveOuttake(0, 0, telemetry);
         stampede.driveIntake(1, 0, telemetry);
-        if (counter == 1) {
-            driveTo.setTargetPosition(drivePositions.get("Position 6"), .5);
-            nextState = "actionStart";
-        }
+        nextState = "actionStart";
     }
 
     public void actionStop() {
-        driveTo.setTargetPosition(drivePositions.get("start"), .5);
+        driveTo.setTargetPosition(drivePositions.get("Position 5"), .5);
         driveTo.areWeThereYet = true;
         stampede.driveOuttake(0, 0, telemetry);
         stampede.driveIntake(0, 0, telemetry);

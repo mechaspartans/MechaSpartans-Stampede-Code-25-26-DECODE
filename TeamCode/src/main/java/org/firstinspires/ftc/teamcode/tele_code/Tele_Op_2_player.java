@@ -85,7 +85,7 @@ public class Tele_Op_2_player extends OpMode {
             outTopSpeed = 0;
         }
         if (gamepad2.right_bumper) {
-            outBottomSpeed = 0.46;
+            outBottomSpeed = 0.50;
             outTopSpeed = 0.44;
         } else if (gamepad2.right_trigger < .4) {
             outBottomSpeed = 0;
