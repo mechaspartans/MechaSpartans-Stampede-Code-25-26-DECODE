@@ -39,6 +39,8 @@ public class Stampede {
     public DcMotorEx outtakeTop;
     public DcMotorEx outtakeBottom;
     public Servo pusher = null;
+
+    public Servo kickstand = null;
     public DcMotorEx odopodLeft = null;
     public DcMotorEx odopodRight = null;
     public DcMotorEx odopodMiddle = null;
@@ -78,29 +80,29 @@ public class Stampede {
      *
      * Total left odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign).
      */
-    static double LEFT_ENCODER_FORWARD_VALUE = -31297 + -31422 + -31945 + -31571;
+    static double LEFT_ENCODER_FORWARD_VALUE = 48935 + 48796 + 48789 + 48621;//48698 + 48654 + 48791 + 48577;
     /** Total middle odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_FORWARD_VALUE = -398 + -840 + -669 + -686;
+    static double MIDDLE_ENCODER_FORWARD_VALUE = 516 + 610 + 18 + 86;//1069 + 189 + 13 + 55;
     /** Total right odometry pod encoder count when traveling a decided forward distance (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_FORWARD_VALUE = -32007 + -32042 + -31976 + -31996;
+    static double RIGHT_ENCODER_FORWARD_VALUE = -48603 - 48454 - 48480 - 48343;//-48650 + -48367 + -48962 + -48600;
     /** Decided distance from encoder forward value tests (we drove forward 96in) times number of tests (in inches). */
     static double FORWARD_TRAVEL = 96 * 4;
 
     /** Total left odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double LEFT_ENCODER_STRAFE_VALUE = 727 + 94 + -187 + 1597;
+    static double LEFT_ENCODER_STRAFE_VALUE = -111 + 32 + 776 + 368;//-538 + 823 + 800 + -526;
     /** Total middle odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_STRAFE_VALUE = -31983 + -32027 + -32093 + -31979;
+    static double MIDDLE_ENCODER_STRAFE_VALUE = -48404 - 48364 - 47621 - 48400;//-48403 + -48480 + -48694 + -48316;
     /** Total right odometry pod encoder count when traveling a decided strafe distance (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_STRAFE_VALUE = -455 + -1147 + -1384 + -204;
+    static double RIGHT_ENCODER_STRAFE_VALUE = -31 + 225 - 145 - 504;//400 + -405 + -310 + 246;
     /** Decided distance from encoder strafe value tests (we strafed right 96in) times number of tests (in inches). */
     static double STRAFE_TRAVEL = 96 * 4;
 
     /** Total left odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double LEFT_ENCODER_CW_TURN = 132984 + 133344 + 138101 + 137789;
+    static double LEFT_ENCODER_CW_TURN = 206190 + 204601 + 203792 + 204179;//208965 + 200065 + 202352 + 200846;
     /** Total middle odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double MIDDLE_ENCODER_CW_TURN = 74385 + 73464 + 86852 + 86790;
+    static double MIDDLE_ENCODER_CW_TURN = -193511 - 193344 - 194106 - 195023;//-182392 + -190451 + -192722 + -191072;
     /** Total right odometry pod encoder count when spinning a decided amount (IF its negative, keep the negative sign). */
-    static double RIGHT_ENCODER_CW_TURN = -126787 + -126350 + -120872 + -121079;
+    static double RIGHT_ENCODER_CW_TURN = 216390 + 218016 + 219034 + 217920;//213772 + 223687 + 221388 + 222472;
     /**
      * Decided amount from encoder spinning value tests [we spun clockwise (CW) ten times (3600 degrees)] times number
      * of tests (in inches).
@@ -176,13 +178,14 @@ public class Stampede {
 
         hasWheelEncoders = withEncoder;
     }
-
+//ng181225
     public void initOtherHardware(boolean withEncoder) {
         intake = setUpEncoderMotor("in", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         outtakeBottom = setUpEncoderMotor("ob", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         outtakeTop = setUpEncoderMotor("ot", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         mintake = setUpEncoderMotor("feeder", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         pusher = hwMap.get(Servo.class, "ps");
+        kickstand = hwMap.get(Servo.class, "ks");
     }
 
     /**
@@ -202,15 +205,18 @@ public class Stampede {
         hwMap = ahwMap;
 
         // If using wheel encoders pass true, otherwise pass false
-        initWheelHardware(true);
+        initWheelHardware(false);
+        initWheelHardware(false);
         initOtherHardware(true);
         limelight = hwMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
+
+        limelight.start();
         // If using odometry pods pass true, otherwise pass false
-        if (false) {
-            odopodLeft = hwMap.get(DcMotorEx.class, "odoleft");
-            odopodRight = hwMap.get(DcMotorEx.class, "odoright");
-            odopodMiddle = hwMap.get(DcMotorEx.class, "odomid");
+        if (true) {
+            odopodLeft = driveRearLeft;
+            odopodRight = driveRearRight;
+            odopodMiddle = driveFrontRight;
         }
         // If using SparkFun otos pass true, otherwise pass false
         if (false) {
@@ -236,12 +242,12 @@ public class Stampede {
      * @param turnCW      speed turn [-1, 1]
      * @param telemetry
      */
-    public void drive(double strafeRight, double forward, double turnCW, Telemetry telemetry) {
+    public void drive(double forward, double strafeRight, double turnCW, Telemetry telemetry) {
 
-        double speedfr = forward - strafeRight - turnCW;
-        double speedfl = forward + strafeRight - turnCW;
-        double speedrl = forward - strafeRight + turnCW;
-        double speedrr = forward + strafeRight + turnCW;
+        double speedfr = strafeRight - forward + turnCW;
+        double speedfl = strafeRight + forward + turnCW;
+        double speedrl = strafeRight - forward - turnCW;
+        double speedrr = strafeRight + forward - turnCW;
 
         double max = Math.max(Math.max(Math.abs(speedfl), Math.abs(speedfr)), Math.max(Math.abs(speedrl), Math.abs(speedrr)));
 
@@ -258,9 +264,11 @@ public class Stampede {
         driveRearRight.setPower(speedrr);
     }
 
-    public void driveOther(double inSpeed, double minSpeed, double outBottomSpeed, double outTopSpeed, Telemetry telemetry) {
+    public void driveIntake(double inSpeed, double minSpeed, Telemetry telemetry) {
         intake.setPower(inSpeed);
         mintake.setPower(minSpeed);
+    }
+    public void driveOuttake(double outBottomSpeed, double outTopSpeed, Telemetry telemetry) {
         outtakeBottom.setPower(outBottomSpeed);
         outtakeTop.setPower(outTopSpeed);
     }
@@ -273,7 +281,7 @@ public class Stampede {
         }
     }
 
-    public void limelightPositioning(Telemetry telemetry) {
+    public void limelightPositioningClose(Telemetry telemetry) {
         limelight.start();
         LLResult result = limelight.getLatestResult();
         if (result != null) {
@@ -294,16 +302,47 @@ public class Stampede {
                     } else if (result.getTa() >= 1.1) {
                         drive(-0.25, 0, 0, telemetry);
                     } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {
-                        if (result.getBotpose().getPosition().x >= -0.15) {
+                        /*if (result.getBotpose().getPosition().x >= -0.15) {
                             drive(0, -0.5, 0, telemetry);
                         } else if (result.getBotpose().getPosition().x <= -0.3) {
                             drive(0, 0.5, 0, telemetry);
                         } else {
                             drive(0, 0, 0, telemetry);
-
-                            limelight.stop();
-                        }
+                        }*/
                     }
+                }
+            }
+        }
+    }
+    public void limelightPositioningFar(Telemetry telemetry) {
+        limelight.start();
+        LLResult result = limelight.getLatestResult();
+        if (result != null) {
+            if (result.isValid()) {
+                Pose3D botpose = result.getBotpose();
+                telemetry.addData("tx", result.getTx());
+                telemetry.addData("ty", result.getTy());
+                telemetry.addData("Botpose", botpose.toString());
+                telemetry.addData("ta", result.getTa());
+                telemetry.update();
+                if (result.getTx() >= 3) {
+                    drive(0, 0, 0.2, telemetry);
+                } else if (result.getTx() <= -1) {
+                    drive(0, 0, -0.2, telemetry);
+                } else if (result.getTx() > -3 && result.getTx() < 3) {
+                    /*if (result.getTa() <= 0.9) {
+                        drive(0.25, 0, 0, telemetry);
+                    } else if (result.getTa() >= 1.1) {
+                        drive(-0.25, 0, 0, telemetry);
+                    } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {*/
+                        //if (result.getBotpose().getPosition().x >= -0.15) {
+                            //drive(0, -0.5, 0, telemetry);
+                        //} else if (result.getBotpose().getPosition().x <= -0.3) {
+                            //drive(0, 0.5, 0, telemetry);
+                        //} else {
+                            //drive(0, 0, 0, telemetry);
+                        //}
+                    //}
                 }
             }
         }

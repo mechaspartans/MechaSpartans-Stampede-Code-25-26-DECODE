@@ -68,11 +68,12 @@ public class RedAuto extends OpMode {
         stampede.drive(-0.1,0,0, telemetry);
         stampede.goingFor(2000);
         stampede.drive(0,0,0, telemetry);
-        stampede.driveOther(0,0,-0.43,-0.43, telemetry);
+        stampede.driveOuttake(-0.43,-0.43, telemetry);
         stampede.goingFor(1000);
-        stampede.driveOther(-1,-1,-0.43,-0.43, telemetry);
+        stampede.driveIntake(-1,-1, telemetry);
         stampede.goingFor(1000);
-        stampede.driveOther(0,0,0,0, telemetry);
+        stampede.driveOuttake(0,0, telemetry);
+        stampede.driveIntake(0,0, telemetry);
     }
 
     @Override
