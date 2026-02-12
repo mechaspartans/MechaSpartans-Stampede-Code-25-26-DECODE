@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.utility_code.Stampede;
+import org.opencv.core.Mat;
 
 @TeleOp(name = "TeleOp")
 public class Tele_Op extends OpMode {
@@ -48,7 +49,6 @@ public class Tele_Op extends OpMode {
     public void initRobot() {
         stampede = new Stampede();
     }
-
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -62,7 +62,7 @@ public class Tele_Op extends OpMode {
         // You can set the robot's starting orientation
         stampede.angleTracker.setOrientation(180);
 
-        telemetry.addData("Say", "Hello Driver");
+        telemetry.addData("Say", "Hello Nevin and Brayden, Good Luck Y'all!");
         telemetry.update();
     }
 
@@ -87,6 +87,11 @@ public class Tele_Op extends OpMode {
      */
     @Override
     public void loop() {
+        double g = 9.81;
+        double x = stampede.limelightDistance();
+        double y = 39;
+        double thada = 47;
+        double v = Math.sqrt(g * Math.pow(x, 2) - x * thada + Math.tan(y) / 2 * Math.pow(Math.cos(thada), 2));
         //turn correcting
         if (Math.abs(gamepad1.left_stick_y) > .2) {
             y1 = -gamepad1.left_stick_y;
@@ -108,8 +113,11 @@ public class Tele_Op extends OpMode {
             x2 = 0;
         }
         if (gamepad1.right_trigger > .4) {
-            outBottomSpeed = 0.41;
-            outTopSpeed = 0.41;
+            outBottomSpeed = .338;
+            outTopSpeed = .338;
+            telemetry.addData("v", v);
+            telemetry.addData("x", x);
+            telemetry.addData("y", y);
         } else if (!gamepad1.right_bumper) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
@@ -138,9 +146,9 @@ public class Tele_Op extends OpMode {
         if (gamepad1.b) {
             stampede.limelightPositioningFar(telemetry);
         }
-        if(gamepad1.y) {
+        if (gamepad1.y) {
             stampede.kickstand.setPosition(1);
-        }else {
+        } else {
             stampede.kickstand.setPosition(0);
         }
         if (gamepad1.x) {
@@ -148,6 +156,27 @@ public class Tele_Op extends OpMode {
         } else {
             stampede.pusher.setPosition(1);
         }
+        /*if (gamepad1.dpad_left) {
+            double x = stampede.sensorUtil.getDistanceLeft();
+            double y = stampede.sensorUtil.getDistanceRight();
+            double degree = Math.toDegrees(Math.atan((y-x)/221.73));
+            telemetry.addData("", Math.toDegrees(Math.atan((y-x)/221.73))); //blue
+            telemetry.addData("", Math.sqrt(Math.pow(x,2) + Math.pow(221.73,2)));
+            if (degree >= 18) {
+                stampede.drive(0, 0, 1, telemetry);
+            } else if (degree <= 16) {
+                stampede.drive(0, 0, -1, telemetry);
+            }
+        }
+        if (gamepad1.dpad_right) {
+            double x = stampede.sensorUtil.getDistanceLeft();
+            double y = stampede.sensorUtil.getDistanceRight();
+            telemetry.addData("Left Distance Sensor", stampede.sensorUtil.getDistanceLeft());
+            telemetry.addData("", Math.toDegrees(Math.atan((x-y)/221.73))); //red
+            telemetry.addData("", Math.sqrt(Math.pow(y,2) + Math.pow(221.73,2)));
+            telemetry.addData("Right Distance Sensor", stampede.sensorUtil.getDistanceRight());
+
+        }*/
 
         //
 

@@ -40,6 +40,8 @@ public class Stampede {
     public DcMotorEx outtakeBottom;
     public Servo pusher = null;
 
+    public Servo gate = null;
+    public SensorUtil sensorUtil = new SensorUtil();
     public Servo kickstand = null;
     public DcMotorEx odopodLeft = null;
     public DcMotorEx odopodRight = null;
@@ -186,6 +188,7 @@ public class Stampede {
         mintake = setUpEncoderMotor("feeder", DcMotorSimple.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
         pusher = hwMap.get(Servo.class, "ps");
         kickstand = hwMap.get(Servo.class, "ks");
+        gate = hwMap.get(Servo.class, "gt");
     }
 
     /**
@@ -208,6 +211,7 @@ public class Stampede {
         initWheelHardware(false);
         initWheelHardware(false);
         initOtherHardware(true);
+        sensorUtil.init(hwMap);
         limelight = hwMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
 
@@ -278,6 +282,16 @@ public class Stampede {
             sleep(millis);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public double limelightDistance() {
+        limelight.start();
+        LLResult result = limelight.getLatestResult();
+        if (result != null && result.isValid()) {
+            return result.getTa();
+        } else {
+            return 1.0;
         }
     }
 

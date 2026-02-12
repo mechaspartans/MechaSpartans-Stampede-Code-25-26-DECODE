@@ -62,21 +62,23 @@ public class NevinAuto extends OpMode {
         drivePositionsBackRed.put("Position 2", new double[]{-12, 24, -90});
         drivePositionsBackBlue.put("Position 2", new double[]{-12, -24, 90});
 
-        drivePositionsAudienceRed.put("Position 3", new double[]{12, 45, -90});
-        drivePositionsAudienceBlue.put("Position 3", new double[]{12, -45, 90});
+        drivePositionsAudienceRed.put("Position 3", new double[]{12, 55, -90});
+        drivePositionsAudienceBlue.put("Position 3", new double[]{12, -55, 90});
         drivePositionsBackRed.put("Position 3", new double[]{-12, 45, -90});
         drivePositionsBackBlue.put("Position 3", new double[]{-12, -50, 90});
 
         drivePositionsAudienceRed.put("Position 3.5", new double[]{12, 13, -90});
         drivePositionsAudienceBlue.put("Position 3.5", new double[]{12, -13, 90});
+        drivePositionsBackRed.put("Position 3.5", new double[]{-12, 13, -90});
+        drivePositionsBackBlue.put("Position 3.5", new double[]{-12, -13, 90});
 
         drivePositionsAudienceRed.put("Position 4", new double[]{36, 24, -90});
         drivePositionsAudienceBlue.put("Position 4", new double[]{36, -24, 90});
         drivePositionsBackRed.put("Position 4", new double[]{12, 24, -90});
         drivePositionsBackBlue.put("Position 4", new double[]{12, -24, 90});
 
-        drivePositionsAudienceRed.put("Position 5", new double[]{36, 45, -90});
-        drivePositionsAudienceBlue.put("Position 5", new double[]{36, -45, 90});
+        drivePositionsAudienceRed.put("Position 5", new double[]{36, 55, -90});
+        drivePositionsAudienceBlue.put("Position 5", new double[]{36, -55, 90});
         drivePositionsBackRed.put("Position 5", new double[]{12, 45, -90});
         drivePositionsBackBlue.put("Position 5", new double[]{12, -45, 90});
 

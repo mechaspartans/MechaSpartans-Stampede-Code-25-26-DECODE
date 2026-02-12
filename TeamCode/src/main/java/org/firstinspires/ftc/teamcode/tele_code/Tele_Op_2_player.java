@@ -118,6 +118,22 @@ public class Tele_Op_2_player extends OpMode {
         } else {
             stampede.pusher.setPosition(1);
         }
+        if (gamepad2.dpad_left) {
+            double x = stampede.sensorUtil.getDistanceLeft();
+            double y = stampede.sensorUtil.getDistanceRight();
+            telemetry.addData("", Math.toDegrees(Math.atan((y-x)/221.73)));
+            telemetry.addData("", Math.sqrt(Math.pow(x,2) + Math.pow(221.73,2)));
+        }
+        if (gamepad2.dpad_right) {
+            double x = stampede.sensorUtil.getDistanceLeft();
+            double y = stampede.sensorUtil.getDistanceRight();
+            telemetry.addData("Angle", Math.toDegrees(Math.atan((x-y)/221.73))); //red
+            telemetry.addData("", Math.sqrt(Math.pow(y,2) + Math.pow(221.73,2)));
+        }
+        if (gamepad2.dpad_up) {
+            telemetry.addData("Left Distance Sensor", stampede.sensorUtil.getDistanceLeft());
+            telemetry.addData("Right Distance Sensor", stampede.sensorUtil.getDistanceRight());
+        }
 
         //
 
