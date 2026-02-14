@@ -113,8 +113,8 @@ public class Tele_Op extends OpMode {
             x2 = 0;
         }
         if (gamepad1.right_trigger > .4) {
-            outBottomSpeed = .338;
-            outTopSpeed = .338;
+            outBottomSpeed = .339;
+            outTopSpeed = .339;
             telemetry.addData("v", v);
             telemetry.addData("x", x);
             telemetry.addData("y", y);
@@ -123,13 +123,12 @@ public class Tele_Op extends OpMode {
             outTopSpeed = 0;
         }
         if (gamepad1.right_bumper) {
-            outBottomSpeed = 0.50;
-            outTopSpeed = 0.44;
+            outBottomSpeed = 0.3;
+            outTopSpeed = 0.3;
         } else if (gamepad1.right_trigger < .4) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
-
         if (gamepad1.left_trigger > .4) {
             inSpeed = 1;
         } else if (gamepad1.left_trigger < .4) {

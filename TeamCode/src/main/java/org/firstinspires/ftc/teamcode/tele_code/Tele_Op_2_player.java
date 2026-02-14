@@ -78,21 +78,21 @@ public class Tele_Op_2_player extends OpMode {
             x2 = 0;
         }
         if (gamepad2.right_trigger > .4) {
-            outBottomSpeed = 0.41;
-            outTopSpeed = 0.41;
+            outBottomSpeed = 0.339;
+            outTopSpeed = 0.339;
         } else if (!gamepad2.right_bumper) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
         if (gamepad2.right_bumper) {
-            outBottomSpeed = 0.50;
-            outTopSpeed = 0.44;
+            outBottomSpeed = 0.3;
+            outTopSpeed = 0.3;
         } else if (gamepad2.right_trigger < .4) {
             outBottomSpeed = 0;
             outTopSpeed = 0;
         }
 
-        if (gamepad1.left_trigger > .4) {
+        if (gamepad2.left_bumper) {
             inSpeed = 1;
         } else if (gamepad1.left_trigger < .4) {
             inSpeed = 0;

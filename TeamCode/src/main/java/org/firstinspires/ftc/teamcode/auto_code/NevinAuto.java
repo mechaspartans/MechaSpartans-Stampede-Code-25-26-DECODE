@@ -52,8 +52,8 @@ public class NevinAuto extends OpMode {
         drivePositionsBackRed.put("start", new double[]{-50, 50, 135});
         drivePositionsBackBlue.put("start", new double[]{-50, -50, -135});
 
-        drivePositionsAudienceRed.put("Position 1", new double[]{57, 13, 155});
-        drivePositionsAudienceBlue.put("Position 1", new double[]{57, -13, -155});
+        drivePositionsAudienceRed.put("Position 1", new double[]{57, 13, 158});
+        drivePositionsAudienceBlue.put("Position 1", new double[]{57, -13, -158});
         drivePositionsBackRed.put("Position 1", new double[]{-12, 12, 135});
         drivePositionsBackBlue.put("Position 1", new double[]{-12, -12, -135});
 
@@ -138,6 +138,9 @@ public class NevinAuto extends OpMode {
         telemetry.addData("IMU Orientation", "IMU %.2f", stampede.angleTracker.getOrientation());
         telemetry.addData("Next action", nextState);
 
+        telemetry.addData("Outtake Bottom Velocity", stampede.outtakeBottom.getVelocity());
+        telemetry.addData("Outtake Top Velocity", stampede.outtakeTop.getVelocity());
+
         driveTo.sendTelemetry(telemetry);
         driveTo.updateDrive();
 
@@ -162,6 +165,8 @@ public class NevinAuto extends OpMode {
                 telemetry.addData("exception", "InvocationTargetException when calling " + currentState + " " +
                         exc.getTargetException() + " " + exc.getTargetException().getStackTrace()[0]);
             }
+            telemetry.addData("Left Distance Sensor", stampede.sensorUtil.getDistanceLeft());
+            telemetry.addData("Right Distance Sensor", stampede.sensorUtil.getDistanceRight());
         }
     }
 
@@ -190,6 +195,8 @@ public class NevinAuto extends OpMode {
         return false;
     }
 
+
+
     // This is the State Machine, it's the "steps" the robot will follow.
     public void actionStart() {
         driveTo.setTargetPosition(drivePositions.get("Position 1"), .75);
@@ -197,35 +204,45 @@ public class NevinAuto extends OpMode {
         //wait = getRuntime() + 5;
         // Name what the next action should be.
         if (isAudience){
-            stampede.driveOuttake(.50, .44, telemetry);
+            stampede.driveOuttake(.339, .339, telemetry);
         }
         else {
-            stampede.driveOuttake(0.41, 0.41, telemetry);
+            stampede.driveOuttake(0.3, 0.3, telemetry);
         }
         stampede.driveIntake(0.2,  0, telemetry);
         nextState = "actionShoot";
     }
 
     public void actionShoot() {
+        boolean shot = false;
         wait = getRuntime() + 1;
-        stampede.driveIntake(1, .5, telemetry);
-        stampede.pusher.setPosition(1);
-        wait = getRuntime() +.75;
+        if (stampede.outtakeBottom.getVelocity() >= 800 && stampede.outtakeTop.getVelocity() >= 800) {
+            stampede.driveIntake(1, .5, telemetry);
+        } else {
+            stampede.driveIntake(0, 0, telemetry);
+        }
+        stampede.goingFor(1000);
+        wait = getRuntime() + 1.5;
         stampede.pusher.setPosition(0);
-        wait = getRuntime() +2;
-        nextState = "actionNoShoot";
+        wait = getRuntime() + 2.75;
+        stampede.pusher.setPosition(0);
+        wait = getRuntime() + 2;
+        shot = true;
+        if (shot) {
+            nextState = "actionNoShoot";
+        }
     }
     public void actionStep2() {
         // stopBetween is whether the robot will stop between positions, or just drive through the position.
         driveTo.setTargetPosition(drivePositions.get("Position 2"), .50, false);
-        stampede.pusher.setPosition(1);
         stampede.driveIntake(1, 0, telemetry);
         nextState = "actionStep3";
     }
     public void actionNoShoot() {
         stampede.driveIntake(1, -.05, telemetry);
+        stampede.pusher.setPosition(1);
         if (counter == -1) {
-            nextState = "actionStep2";
+            nextState = "actionStop";
         } else if (counter == 0) {
             nextState = "actionStep4";
         } else {
@@ -248,7 +265,6 @@ public class NevinAuto extends OpMode {
 
     public void actionStep4() {
         driveTo.setTargetPosition(drivePositions.get("Position 4"), .25);
-        stampede.pusher.setPosition(1);
         nextState = "actionStep5";
     }
 

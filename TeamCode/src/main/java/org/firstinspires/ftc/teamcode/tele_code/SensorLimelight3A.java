@@ -115,6 +115,7 @@ public class SensorLimelight3A extends LinearOpMode {
                     telemetry.addData("txnc", result.getTxNC());
                     telemetry.addData("ty", result.getTy());
                     telemetry.addData("tync", result.getTyNC());
+                    telemetry.addData("ta", result.getTa());
 
                     telemetry.addData("Botpose", botpose.toString());
 

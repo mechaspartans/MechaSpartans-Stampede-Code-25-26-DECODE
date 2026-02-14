@@ -267,7 +267,7 @@ public class Stampede {
         driveFrontRight.setPower(speedfr);
         driveRearRight.setPower(speedrr);
     }
-
+    public void driveTrain(double driveFrontLeft, double driveFrontRight,double driveRearRight, double driveRearLeft, Telemetry telemetry) {}
     public void driveIntake(double inSpeed, double minSpeed, Telemetry telemetry) {
         intake.setPower(inSpeed);
         mintake.setPower(minSpeed);
@@ -339,16 +339,16 @@ public class Stampede {
                 telemetry.addData("Botpose", botpose.toString());
                 telemetry.addData("ta", result.getTa());
                 telemetry.update();
-                if (result.getTx() >= 3) {
+                if (result.getTx() >= 5) {
                     drive(0, 0, 0.2, telemetry);
-                } else if (result.getTx() <= -1) {
+                } else if (result.getTx() <= 4.4) {
                     drive(0, 0, -0.2, telemetry);
-                } else if (result.getTx() > -3 && result.getTx() < 3) {
-                    /*if (result.getTa() <= 0.9) {
+                } else if (result.getTx() > 4.4 && result.getTx() < 5) {
+                    if (result.getTa() <= 0.27) {
                         drive(0.25, 0, 0, telemetry);
-                    } else if (result.getTa() >= 1.1) {
+                    } else if (result.getTa() >= 0.29) {
                         drive(-0.25, 0, 0, telemetry);
-                    } else if (result.getTa() < 1.1 && result.getTa() > 0.9) {*/
+                    } else if (result.getTa() < 0.29 && result.getTa() > 0.27) {
                         //if (result.getBotpose().getPosition().x >= -0.15) {
                             //drive(0, -0.5, 0, telemetry);
                         //} else if (result.getBotpose().getPosition().x <= -0.3) {
@@ -356,7 +356,7 @@ public class Stampede {
                         //} else {
                             //drive(0, 0, 0, telemetry);
                         //}
-                    //}
+                    }
                 }
             }
         }
